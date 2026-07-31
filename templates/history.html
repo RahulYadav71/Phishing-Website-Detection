@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Scan History</h1>
+
+<table class="history-table">
+
+<thead>
+
+<tr>
+
+<th>Website</th>
+
+<th>Result</th>
+
+<th>Confidence</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for item in history %}
+
+<tr>
+
+<td>{{ item.url }}</td>
+
+<td>{{ item.result }}</td>
+
+<td>{{ item.confidence }}%</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% endblock %}

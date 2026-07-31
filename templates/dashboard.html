@@ -1,0 +1,376 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | PhishShield AI{% endblock %}
+
+{% block content %}
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <h1>🛡️ PhishShield AI</h1>
+
+    <p>
+        AI Powered Website Phishing Detection using Machine Learning
+    </p>
+
+</section>
+
+<!-- ================= URL SCANNER ================= -->
+
+<div class="scanner">
+
+    <form method="POST">
+
+        <input
+            type="url"
+            name="url"
+            placeholder="Enter Website URL (https://example.com)"
+            value="{{ url }}"
+            required>
+
+        <button type="submit">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            Scan Website
+
+        </button>
+
+    </form>
+
+</div>
+
+<!-- ================= RESULT CARDS ================= -->
+
+<div class="cards">
+
+    <div class="card">
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        <h4>Status</h4>
+
+        <h2>
+
+        {% if result %}
+
+            {{ result }}
+
+        {% else %}
+
+            Waiting...
+
+        {% endif %}
+
+        </h2>
+
+    </div>
+
+    <div class="card">
+
+        <i class="fa-solid fa-chart-line"></i>
+
+        <h4>Confidence</h4>
+
+        <h2 id="confidenceText">
+
+        {% if confidence %}
+
+            {{ confidence }}%
+
+        {% else %}
+
+            0%
+
+        {% endif %}
+
+        </h2>
+
+    </div>
+
+    <div class="card">
+
+        <i class="fa-solid fa-lock"></i>
+
+        <h4>HTTPS</h4>
+
+        <h2>
+
+        {% if features.get("IsHTTPS") %}
+
+            Yes
+
+        {% else %}
+
+            No
+
+        {% endif %}
+
+        </h2>
+
+    </div>
+
+    <div class="card">
+
+        <i class="fa-solid fa-triangle-exclamation"></i>
+
+        <h4>Risk Level</h4>
+
+        <h2>
+
+        {% if result=="Legitimate Website ✅" %}
+
+            <span class="good">LOW</span>
+
+        {% elif result=="Phishing Website ⚠️" %}
+
+            <span class="danger">HIGH</span>
+
+        {% else %}
+
+            --
+
+        {% endif %}
+
+        </h2>
+
+    </div>
+
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+
+<div class="dashboard-grid">
+
+    <!-- Confidence Chart -->
+
+    <div class="glass-card">
+
+        <h3>
+
+            <i class="fa-solid fa-chart-pie"></i>
+
+            Confidence Analysis
+
+        </h3>
+
+        <div style="height:300px">
+
+            <canvas id="confidenceChart"></canvas>
+
+        </div>
+
+    </div>
+
+    <!-- Security Features -->
+
+    <div class="glass-card">
+
+        <h3>
+
+            <i class="fa-solid fa-lock"></i>
+
+            Security Features
+
+        </h3>
+
+        <div class="feature-list">
+
+            <div class="feature-item">
+
+                <span>HTTPS</span>
+
+                <span>
+
+                {{ "✔ Secure" if features.get("IsHTTPS") else "✖ Not Secure" }}
+
+                </span>
+
+            </div>
+
+            <div class="feature-item">
+
+                <span>Images</span>
+
+                <span>{{ features.get("NoOfImage",0) }}</span>
+
+            </div>
+
+            <div class="feature-item">
+
+                <span>JavaScript Files</span>
+
+                <span>{{ features.get("NoOfJS",0) }}</span>
+
+            </div>
+
+            <div class="feature-item">
+
+                <span>Password Field</span>
+
+                <span>
+
+                {{ "Detected" if features.get("HasPasswordField") else "Not Found" }}
+
+                </span>
+
+            </div>
+
+            <div class="feature-item">
+
+                <span>Submit Button</span>
+
+                <span>
+
+                {{ "Present" if features.get("HasSubmitButton") else "Missing" }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= WEBSITE INFORMATION ================= -->
+
+<div class="glass-card">
+
+    <h3>
+
+        <i class="fa-solid fa-globe"></i>
+
+        Website Information
+
+    </h3>
+
+    <div class="info-grid">
+
+        <div class="info-box">
+
+            <h4>Website</h4>
+
+            <p>{{ url }}</p>
+
+        </div>
+
+        <div class="info-box">
+
+            <h4>URL Length</h4>
+
+            <p>{{ features.get("URLLength",0) }}</p>
+
+        </div>
+
+        <div class="info-box">
+
+            <h4>Domain Length</h4>
+
+            <p>{{ features.get("DomainLength",0) }}</p>
+
+        </div>
+
+        <div class="info-box">
+
+            <h4>Subdomains</h4>
+
+            <p>{{ features.get("NoOfSubDomain",0) }}</p>
+
+        </div>
+
+        <div class="info-box">
+
+            <h4>HTML Lines</h4>
+
+            <p>{{ features.get("LineOfCode",0) }}</p>
+
+        </div>
+
+        <div class="info-box">
+
+            <h4>Images</h4>
+
+            <p>{{ features.get("NoOfImage",0) }}</p>
+
+        </div>
+
+        <div class="info-box">
+
+            <h4>JavaScript</h4>
+
+            <p>{{ features.get("NoOfJS",0) }}</p>
+
+        </div>
+
+        <div class="info-box">
+
+            <h4>ML Model</h4>
+
+            <p>Random Forest</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= AI RECOMMENDATION ================= -->
+
+<div class="glass-card">
+
+    <h3>
+
+        <i class="fa-solid fa-robot"></i>
+
+        AI Recommendation
+
+    </h3>
+
+    {% if result=="Legitimate Website ✅" %}
+
+    <div class="recommend safe">
+
+        ✅ Website appears legitimate.<br>
+        ✅ HTTPS connection available.<br>
+        ✅ Low phishing probability.<br>
+        ✅ Safe for normal browsing.
+
+    </div>
+
+    {% elif result=="Phishing Website ⚠️" %}
+
+    <div class="recommend danger-box">
+
+        ⚠ High phishing probability detected.<br>
+        ⚠ Avoid entering passwords.<br>
+        ⚠ Avoid making payments.<br>
+        ⚠ Leave the website immediately.
+
+    </div>
+
+    {% else %}
+
+    <div class="recommend">
+
+        Scan a website to receive AI-powered security recommendations.
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<!-- Pass Confidence to JavaScript -->
+
+<script>
+
+const confidenceValue = {{ confidence|default(0)|float }};
+
+</script>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+{% endblock %}

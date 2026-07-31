@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}PhishShield AI{% endblock %}</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+
+<body>
+
+<!-- ================= Sidebar ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        <h2>PhishShield</h2>
+
+    </div>
+
+    <ul class="menu">
+
+        <li>
+            <a href="{{ url_for('dashboard') }}">
+                <i class="fa-solid fa-chart-line"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('analytics') }}">
+                <i class="fa-solid fa-chart-pie"></i>
+                Analytics
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('history_page') }}">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                History
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('reports') }}">
+                <i class="fa-solid fa-file-lines"></i>
+                Reports
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('settings') }}">
+                <i class="fa-solid fa-gear"></i>
+                Settings
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('about') }}">
+                <i class="fa-solid fa-circle-info"></i>
+                About
+            </a>
+        </li>
+
+    </ul>
+
+</aside>
+
+<!-- ================= Main ================= -->
+
+<div class="main">
+
+    <!-- ================= Topbar ================= -->
+
+    <header class="topbar">
+
+        <div>
+
+            <h2>🛡 PhishShield AI</h2>
+
+            <p>AI Powered Website Security Analyzer</p>
+
+        </div>
+
+        <div class="top-right">
+
+            {% if session.get('user') %}
+
+            <div class="profile-dropdown">
+
+                <button class="profile-btn">
+
+                    <i class="fa-solid fa-circle-user"></i>
+
+                    {{ session['user'] }}
+
+                    <i class="fa-solid fa-chevron-down"></i>
+
+                </button>
+
+                <div class="dropdown-content">
+
+                    <a href="{{ url_for('about') }}">
+                        <i class="fa-solid fa-user"></i>
+                        About
+                    </a>
+
+                    <a href="{{ url_for('logout') }}">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Logout
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <a href="{{ url_for('login') }}" class="login-btn">
+
+                <i class="fa-solid fa-right-to-bracket"></i>
+
+                Login
+
+            </a>
+
+            <a href="{{ url_for('signup') }}" class="signup-btn">
+
+                <i class="fa-solid fa-user-plus"></i>
+
+                Sign Up
+
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </header>
+
+    <!-- Flash Messages -->
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            <div class="flash-container">
+
+                {% for message in messages %}
+
+                    <div class="flash-message">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+    <!-- Page Content -->
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+
+</html>
+
+<script>
+const profileDropdown = document.querySelector(".profile-dropdown");
+const profileBtn = document.querySelector(".profile-btn");
+
+profileBtn.addEventListener("click", function(e){
+    e.stopPropagation();
+    profileDropdown.classList.toggle("active");
+});
+
+document.addEventListener("click", function(){
+    profileDropdown.classList.remove("active");
+});
+</script>

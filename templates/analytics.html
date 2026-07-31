@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Analytics Dashboard</h1>
+
+<div class="cards">
+
+<div class="card">
+
+<h4>Total Scans</h4>
+
+<h2>{{ total }}</h2>
+
+</div>
+
+<div class="card">
+
+<h4>Safe Websites</h4>
+
+<h2>{{ safe }}</h2>
+
+</div>
+
+<div class="card">
+
+<h4>Phishing Websites</h4>
+
+<h2>{{ phishing }}</h2>
+
+</div>
+
+</div>
+
+{% endblock %}

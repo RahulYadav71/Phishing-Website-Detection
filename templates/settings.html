@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Settings</h1>
+
+<div class="glass-card">
+
+    <label for="themeSelect">Theme</label>
+
+    <select id="themeSelect">
+
+        <option value="dark">🌙 Dark</option>
+
+        <option value="light">☀️ Light</option>
+
+    </select>
+
+    <br><br>
+
+    <label>
+        Notifications
+    </label>
+
+    <input type="checkbox" checked>
+
+</div>
+
+<script>
+
+const themeSelect = document.getElementById("themeSelect");
+
+// Load saved theme
+const savedTheme = localStorage.getItem("theme") || "dark";
+document.body.classList.add(savedTheme);
+themeSelect.value = savedTheme;
+
+// Change theme
+themeSelect.addEventListener("change", function () {
+
+    document.body.classList.remove("dark", "light");
+
+    document.body.classList.add(this.value);
+
+    localStorage.setItem("theme", this.value);
+
+});
+
+</script>
+
+{% endblock %}
